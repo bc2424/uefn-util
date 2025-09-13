@@ -6,7 +6,7 @@ Supporting 31.41 UEFN, it allows you to load ingame in the Battle Royale gamemod
 https://gofile.io/d/5KnfUv
 
 ## HOW TO USE:
-1. Compile the "UbaHost.dll" or get the latest version from [releases](https://github.com/bc2424/uefn-util/releases/).
+1. Compile the "UbaHost.dll" with Visual Studio 2022 or get the latest version from [releases](https://github.com/bc2424/uefn-util/releases/tag/31.41).
 2. Place the DLL "UbaHost.dll" in the path "Engine\Binaries\Win64\UnrealBuildAccelerator\x64\" in your install.
    *  "UnrealBuildAccelerator\x64\" will not exist by default.
 3. [Download Neonite from Hybrid FNBR's github](https://github.com/HybridFNBR/Neonite). Follow the readme then run the `Start Neonite.bat` file.
