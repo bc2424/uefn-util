@@ -40,6 +40,19 @@ void HandleStartingNewPlayerHook(AFortGameModeAthena* GameMode, AFortPlayerContr
 	AddItemForced(NewPlayer, UFortKismetLibrary::K2_GetResourceItemDefinition(EFortResourceType::Metal), 500, 0);
 	AddItemForced(NewPlayer, UFortKismetLibrary::K2_GetResourceItemDefinition(EFortResourceType::Permanite), 1, 0);
 
+	if (UFortKismetLibrary::InEditorOrPIE)
+	{
+		for (int i = 0; i < GetDefaultObject<UAthenaDeveloperSettings>()->InventoryItemsToGrant.Num(); ++i)
+		{
+			auto& BRDevItemInstance = GetDefaultObject<UAthenaDeveloperSettings>()->InventoryItemsToGrant[i];
+
+			if (!UKismetSystemLibrary::IsValid(BRDevItemInstance.Item))
+				continue;
+
+			AddItemForced(NewPlayer, Cast<UFortItemDefinition>(BRDevItemInstance.Item), BRDevItemInstance.Count);
+		}
+	}
+
 	if (NewPlayer->BroadcastRemoteClientInfo)
 	{
 		NewPlayer->BroadcastRemoteClientInfo->bActive = true;
