@@ -66,6 +66,7 @@ https://gofile.io/d/5KnfUv
  * Make anims sequences not crash when their thumbnail is loaded in editor.
  * Fixes for several things that work badly or don't work at all.
  * Loading of compiled Mutables
+ * Re-enable cosmetic streaming in editor
  * Aircraft and storm
  * Player bots
 
