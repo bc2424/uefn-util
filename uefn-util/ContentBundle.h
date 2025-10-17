@@ -9,7 +9,7 @@ static void (*OnStreamingObjectLoaded)(URuntimeHashExternalStreamingObjectBase* 
 
 UWorld* (*GetInjectedWorld)(__int64 ContentBundle) = decltype(GetInjectedWorld)(0xCB82F30 + uintptr_t(GetModuleHandle(0)));
 
-static void(*GetObjectsWithOuter)(const class UObject* Outer, TArray<UObject*>& Results, bool bIncludeNestedObjects, byte ExclusionFlags, byte ExclusionInternalFlags) = decltype(GetObjectsWithOuter)(0x1DE4660 + uintptr_t(GetModuleHandle(0)));
+static void(*GetObjectsWithOuter)(const class UObjectBase* Outer, TArray<UObject*>& Results, bool bIncludeNestedObjects, byte ExclusionFlags, byte ExclusionInternalFlags) = decltype(GetObjectsWithOuter)(0x1DE4660 + uintptr_t(GetModuleHandle(0)));
 
 static void (*InitializeForPIE)(__int64 ContentBundle);
 void InitializeForPIEHook(__int64 ContentBundle)
@@ -42,12 +42,12 @@ void OnStreamingObjectLoadedHook(URuntimeHashExternalStreamingObjectBase* Runtim
 	if (RuntimeHashExternalStreamingObjectBase->IsA(URuntimeHashSetExternalStreamingObject::StaticClass()))
 	{
 		auto RuntimeHashExternalStreamingObject = (URuntimeHashSetExternalStreamingObject*)&RuntimeHashExternalStreamingObjectBase;
-		/*
+		
 		if (RuntimeHashExternalStreamingObjectBase->CellToStreamingData.Num() >= 1)
 		{
 			TArray<UObject*> Objects;
 
-			GetObjectsWithOuter(RuntimeHashExternalStreamingObjectBase, Objects);
+			GetObjectsWithOuter((UObjectBase*)RuntimeHashExternalStreamingObjectBase, Objects, true, 0, 0);
 
 			for (UObject* Object : Objects)
 			{
@@ -55,31 +55,9 @@ void OnStreamingObjectLoadedHook(URuntimeHashExternalStreamingObjectBase* Runtim
 				{
 					UWorldPartitionRuntimeLevelStreamingCell* RuntimeCell = (UWorldPartitionRuntimeLevelStreamingCell*)&Object;
 
-					const FWorldPartitionRuntimeCellStreamingData& CellStreamingData = *RuntimeHashExternalStreamingObject->CellToStreamingData.FindByFName(RuntimeCell->Name);
+					const FWorldPartitionRuntimeCellStreamingData& CellStreamingData = *RuntimeHashExternalStreamingObject->CellToStreamingData.Find(RuntimeCell->Name);
 					RuntimeCell->CreateAndSetLevelStreaming(CellStreamingData.PackageName, CellStreamingData.WorldAsset);
 				}
-			}
-		}*/
-
-		//gather all cells from every package
-		for (int32 i = 0; i < RuntimeHashExternalStreamingObject->RuntimeStreamingData.Num(); i++)
-		{
-			FRuntimePartitionStreamingData* StreamingData = &RuntimeHashExternalStreamingObject->RuntimeStreamingData[i];
-
-			for (int32 i = 0; i < StreamingData->SpatiallyLoadedCells.Num(); i++)
-			{
-				UWorldPartitionRuntimeLevelStreamingCell* RuntimeCell = (UWorldPartitionRuntimeLevelStreamingCell*)&StreamingData->SpatiallyLoadedCells[i];
-
-				const FWorldPartitionRuntimeCellStreamingData& CellStreamingData = *RuntimeHashExternalStreamingObject->CellToStreamingData.Find(RuntimeCell->Name);
-				RuntimeCell->CreateAndSetLevelStreaming(CellStreamingData.PackageName, CellStreamingData.WorldAsset);
-			}
-
-			for (int32 i = 0; i < StreamingData->SpatiallyLoadedCells.Num(); i++)
-			{
-				UWorldPartitionRuntimeLevelStreamingCell* RuntimeCell = (UWorldPartitionRuntimeLevelStreamingCell*)&StreamingData->SpatiallyLoadedCells[i];
-
-				const FWorldPartitionRuntimeCellStreamingData& CellStreamingData = *RuntimeHashExternalStreamingObject->CellToStreamingData.Find(RuntimeCell->Name);
-				RuntimeCell->CreateAndSetLevelStreaming(CellStreamingData.PackageName, CellStreamingData.WorldAsset);
 			}
 		}
 	}
