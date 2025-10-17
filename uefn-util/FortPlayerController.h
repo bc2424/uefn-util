@@ -204,85 +204,52 @@ void OnPossessHook(AFortPlayerController* PlayerController, APawn* InPawn)
 static void (*ServerCreateBuildingActor)(UObject*, FFrame&, void*);
 void ServerCreateBuildingActorHook(UObject* Context, FFrame& Stack, void* Ret)
 {
-    auto PlayerController = (AFortPlayerControllerAthena*)Context;
+    auto PC = (AFortPlayerControllerAthena*)Context;
 
     auto Params = (Params::FortPlayerController_ServerCreateBuildingActor*)Stack.Locals;
 
-    if (!PlayerController)
+    if (!PC)
         return ServerCreateBuildingActor(Context, Stack, Ret);
 
     auto GameState = (AFortGameStateZone*)UWorld::GetWorld()->GameState;
 
-    TSubclassOf<ABuildingSMActor> BuildingClass;
-    BuildingClass = Params->CreateBuildingData.BuildingClassData.BuildingClass;
-
-    if (PlayerController->IsA(AFortPlayerControllerAthena::StaticClass()))
+    auto BuildingClass = PC->BroadcastRemoteClientInfo->RemoteBuildableClass;
+    if (!BuildingClass)
     {
-        AFortPlayerControllerAthena* Controller = Cast<AFortPlayerControllerAthena>(PlayerController);
-        if (Controller->BroadcastRemoteClientInfo && Controller->BroadcastRemoteClientInfo->RemoteBuildableClass.Get())
-        {
-            BuildingClass = Controller->BroadcastRemoteClientInfo->RemoteBuildableClass;
-            Params->CreateBuildingData.BuildingClassData.BuildingClass = BuildingClass.Get();
-        }
-
-        if (!BuildingClass && Controller->BroadcastRemoteClientInfo)
-        {
-            Controller->BroadcastRemoteClientInfo->bActive = true;
-            Controller->BroadcastRemoteClientInfo->OnRep_bActive();
-        }
+        return ServerCreateBuildingActor(Context, Stack, Ret);
     }
 
-    if (!PlayerController->CanAffordToPlaceBuildableClass(Params->CreateBuildingData.BuildingClassData))
+    FTransform BuildingTransform;
+    BuildingTransform.Translation.X = Params->CreateBuildingData.BuildLoc.X;
+    BuildingTransform.Translation.Y = Params->CreateBuildingData.BuildLoc.Y;
+    BuildingTransform.Translation.Z = Params->CreateBuildingData.BuildLoc.Z;
+    BuildingTransform.Scale3D.X = 1.0;
+    BuildingTransform.Scale3D.Y = 1.0;
+    BuildingTransform.Scale3D.Z = 1.0;
+    BuildingTransform.Rotation = UKismetMathLibrary::Conv_RotatorToQuaternion(Params->CreateBuildingData.BuildRot);
+
+    auto NewBuilding = Cast<ABuildingSMActor>(ABuildingActor::K2_SpawnBuildingActor(UWorld::GetWorld(), BuildingClass, BuildingTransform, nullptr, nullptr, false, false));
+
+    if (!NewBuilding)
+        return ServerCreateBuildingActor(Context, Stack, Ret);
+
+    NewBuilding->InitializeKismetSpawnedBuildingActor(nullptr, PC, true, nullptr, false);
+    NewBuilding->bPlayerPlaced = true;
+    NewBuilding->SetMirrored(Params->CreateBuildingData.bMirrored);
+
+    auto PlayerStateAthena = Cast<AFortPlayerStateAthena>(PC->PlayerState);
+
+    if (PlayerStateAthena)
     {
-            return ServerCreateBuildingActor(Context, Stack, Ret);
+        NewBuilding->SetTeam(PlayerStateAthena->TeamIndex);
+        NewBuilding->OnRep_Team();
     }
 
-    TArray<ABuildingActor*> ExistingBuildings;
-    UBuildingStructuralSupportSystem* StructuralSupportSystem;
-    UFortKismetLibrary::GetBuildingStructuralSupportSystem(PlayerController->GetWorld(), &StructuralSupportSystem);
+    UFortItemDefinition* ItemDefinition = UFortKismetLibrary::K2_GetResourceItemDefinition(NewBuilding->ResourceType);
+    auto ResourceItem = FindInventoryInstance(PC, ItemDefinition);
 
-    const EFortStructuralGridQueryResults Result = StructuralSupportSystem->CanAddBuildingActorClassToGrid(PlayerController->GetWorld(), BuildingClass, Params->CreateBuildingData.BuildLoc, Params->CreateBuildingData.BuildRot, Params->CreateBuildingData.bMirrored, &ExistingBuildings, nullptr, false);
-    if (Result == EFortStructuralGridQueryResults::CanAdd)
-    {
-        StructuralSupportSystem->StartActorRemovalBatch();
-        for (ABuildingActor* BuildingActor : ExistingBuildings)
-        {
-            BuildingActor->K2_DestroyActor();
-        }
-        StructuralSupportSystem->StopActorRemovalBatch();
-
-        FTransform BuildingTransform;
-        BuildingTransform.Translation.X = Params->CreateBuildingData.BuildLoc.X;
-        BuildingTransform.Translation.Y = Params->CreateBuildingData.BuildLoc.Y;
-        BuildingTransform.Translation.Z = Params->CreateBuildingData.BuildLoc.Z;
-        BuildingTransform.Scale3D.X = 1.0;
-        BuildingTransform.Scale3D.Y = 1.0;
-        BuildingTransform.Scale3D.Z = 1.0;
-        BuildingTransform.Rotation = UKismetMathLibrary::Conv_RotatorToQuaternion(Params->CreateBuildingData.BuildRot);
-
-        auto NewBuildingActor = Cast<ABuildingSMActor>(ABuildingActor::K2_SpawnBuildingActor(PlayerController->GetWorld(), BuildingClass, BuildingTransform, nullptr, nullptr, false, false));
-        if (NewBuildingActor != nullptr)
-        {
-            const uint8 PlayerTeam = UFortKismetLibrary::GetActorTeam(PlayerController);
-            NewBuildingActor->SetTeam(PlayerTeam);
-
-            NewBuildingActor->InitializeKismetSpawnedBuildingActor(NewBuildingActor, PlayerController, true, nullptr, false);
-            NewBuildingActor->bPlayerPlaced = true;
-
-            UFortItemDefinition* ItemDefinition = UFortKismetLibrary::K2_GetResourceItemDefinition(NewBuildingActor->ResourceType);
-            auto ResourceItem = FindInventoryInstance(PlayerController, ItemDefinition);
-
-            if (ResourceItem && !PlayerController->bInfiniteAmmo)
-                RemoveItem(PlayerController, ResourceItem->GetItemGuid(), 10);
-
-            auto FortGameMode = (AFortGameMode*)PlayerController->GetWorld()->AuthorityGameMode;
-
-            if (FortGameMode != nullptr)
-            {
-                FortGameMode->ScoreBuildingConstruction(PlayerController, NewBuildingActor);
-            }
-        }
-    }
+    if (ResourceItem && !PC->bInfiniteAmmo)
+        RemoveItem(PC, ResourceItem->GetItemGuid(), 10);
 
     return ServerCreateBuildingActor(Context, Stack, Ret);
 }

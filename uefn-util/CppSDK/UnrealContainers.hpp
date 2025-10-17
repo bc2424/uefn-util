@@ -580,6 +580,20 @@ namespace UC
 	private:
 		TSet<ElementType> Elements;
 
+	public:
+		inline ValueElementType* Find(KeyElementType& Key)
+		{
+			for (auto It = begin(*this); It != end(*this); ++It)
+			{
+				if (It->Key() == Key)
+				{
+					return &It->Value();
+				}
+			}
+
+			return nullptr;
+		}
+
 	private:
 		inline void VerifyIndex(int32 Index) const { if (!IsValidIndex(Index)) throw std::out_of_range("Index was out of range!"); }
 

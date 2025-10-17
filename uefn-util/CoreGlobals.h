@@ -7,7 +7,12 @@
 #include "NetDriver.h"
 #include "AbilitySystemComponent_Abilities.h"
 #include "World.h"
+#include "GameModeBase.h"
 #include "GameViewportClient.h"
+#include "WorldPartitionLevelStreamingDynamic.h"
+#include "ExternalDataLayerManager.h"
+#include "ContentBundle.h"
+#include "AnimSequence.h"
 
 #include "FortPlayerController.h"
 #include "FortPlayerControllerAthena.h"
@@ -36,6 +41,7 @@ void SetEngineStartupModuleLoadingCompleteHook()
     NetDriver::InitHooks();
     AbilitySystemComponent::InitHooks();
     World::InitHooks();
+    GameModeBase::InitHooks();
 
     //mcp
     CREATEHOOK(BaseAddress() + 0xEB98560, DispatchRequestHook, &DispatchRequest);
@@ -46,6 +52,10 @@ void SetEngineStartupModuleLoadingCompleteHook()
     //uefn hooks
     CREATEHOOK(BaseAddress() + 0x11C02B70, RefreshBakedDataHook, &RefreshBakedData);
     GameViewportClient::InitHooks();
+    WorldPartitionLevelStreamingDynamic::InitHooks();
+    ExternalDataLayerManager::InitHooks();
+    ContentBundle::InitHooks();
+    AnimSequence::InitHooks();
 
     //server code
     FortPlayerController::InitHooks();
@@ -82,6 +92,7 @@ void SetEngineStartupModuleLoadingCompleteHook()
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0xC3027C9), "\x90\x90\x90\x90\x90\xe9\x00\x02\x00", 9, NULL); //no net connection timeout, maybe do this w a proper hook?
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0xC302809), "\xe9\xc5\x01\x00", 4, NULL); //another net timeout patch smth calls this IDK
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0xB13FB32), "\xe9\xe8\x02\x00", 4, NULL); //helios crash
+    WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0xAFCE78D), "\xe9\xa1\x02\x00", 4, NULL); //helios crash 2
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x18F26189), "\xe9\xed\x01\x00", 4, NULL); //conversations
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x47FEB20), "\xc3", 1, NULL); //slate vector art validate
 
@@ -106,14 +117,15 @@ void SetEngineStartupModuleLoadingCompleteHook()
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.TacticalSprint 0", nullptr); //temp
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.Sliding 0", nullptr); //temp
 
-    WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0xB815A13), "\xeb", 1, NULL); //animations
-
     // lol
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"a.Fort.EnableOldLocomotionData 1", nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"log LogContentBundle veryverbose", nullptr);
 
     //preferred cvars
+    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"net.AllowPIESeamlessTravel 1", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"net.Iris.EnableFilterMappings 0", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"SupervisedSettings.UseEOSIntegration 0", nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"pcg.PIE.RebuildLandscapeOnPIE 0", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"log LogEOSSDK off", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"log LogUObjectBase off", nullptr);
 

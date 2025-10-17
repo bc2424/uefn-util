@@ -41,6 +41,8 @@
 #include "SDK/OnlineSubsystemUtils_structs.hpp"
 #include "SDK/Paper2D_structs.hpp"
 #include "SDK/Paper2D_classes.hpp"
+#include "SDK/AssetRegistry_structs.hpp"
+#include "SDK/AssetRegistry_classes.hpp"
 #include "SDK/ClamberingCodeRuntime_structs.hpp"
 #include "SDK/ClamberingCodeRuntime_classes.hpp"
 #include "SDK/FortniteGame_parameters.hpp"/*
@@ -223,8 +225,6 @@
 #include "SDK/ToolWidgets_structs.hpp"
 #include "SDK/ToolWidgets_classes.hpp"
 #include "SDK/MaterialUtilities_structs.hpp"
-#include "SDK/AssetRegistry_structs.hpp"
-#include "SDK/AssetRegistry_classes.hpp"
 #include "SDK/VerseFortniteInternal_0_structs.hpp"
 #include "SDK/VerseFortniteGameScript_fort_playspace_player_helper_structs.hpp"
 #include "SDK/VerseFortniteGameScript_fort_playspace_player_helper_classes.hpp"

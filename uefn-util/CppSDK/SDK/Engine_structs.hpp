@@ -11312,6 +11312,18 @@ public:
 	class FString                                 RedirectURL;                                       // 0x0038(0x0010)(ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 	TArray<class FString>                         Op;                                                // 0x0048(0x0010)(ZeroConstructor, NativeAccessSpecifierPublic)
 	class FString                                 Portal;                                            // 0x0058(0x0010)(ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+
+	FString ToString(bool FullyQualified = true)
+	{
+		FString (*ToString)(FURL* URL, bool FullyQualified) = decltype(ToString)(0xCACD400 + uintptr_t(GetModuleHandle(0)));
+		return ToString(this, FullyQualified);
+	}
+
+	void FURLConstructor(FURL* Base, const TCHAR* TextURL, ETravelType Type)
+	{
+		void (*FURLConstructor)(FURL* URL, FURL* Base, const TCHAR* TextURL, ETravelType Type) = decltype(FURLConstructor)(0xCA7C8A0 + uintptr_t(GetModuleHandle(0)));
+		FURLConstructor(this, Base, TextURL, Type);
+	}
 };
 
 // ScriptStruct Engine.ComponentSync

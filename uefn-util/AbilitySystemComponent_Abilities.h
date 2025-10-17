@@ -16,7 +16,6 @@ enum class EConsiderPending : uint8
 	All = PendingAdd | PendingRemove
 };
 
-
 static bool (*InternalTryActivateAbility)(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle, FPredictionKey InPredictionKey, UGameplayAbility** OutInstancedAbility, void* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData) = decltype(InternalTryActivateAbility)(BaseAddress() + 0xEA2BB70);
 static FGameplayAbilitySpecHandle(*GiveAbility)(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayAbilitySpec& Spec) = decltype(GiveAbility)(BaseAddress() + 0xEA24C50);
 static FGameplayAbilitySpec* (*FindAbilitySpecFromHandle)(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle, int ConsiderPending) = decltype(FindAbilitySpecFromHandle)(BaseAddress() + 0xEA1AF40);

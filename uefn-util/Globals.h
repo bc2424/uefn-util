@@ -9,6 +9,7 @@ struct FFrame
     uint8* Code;
     uint8* Locals;
 };
+inline UObject* (*FindObjectWithOuter)(const class UObject* Outer, const class UClass* ClassToLookFor, FName NameToLookFor) = decltype(FindObjectWithOuter)(0x1DE2080 + uintptr_t(GetModuleHandle(0)));
 inline UObject* (*StaticFindObject_)(UClass* Class, UObject* Package, const wchar_t* OrigInName, bool ExactClass) = decltype(StaticFindObject_)(__int64(GetModuleHandleW(0)) + 0x1DCEBE0);
 inline UObject* (*StaticLoadObject_)(UClass* Class, UObject* InOuter, const TCHAR* Name, const TCHAR* Filename, uint32_t LoadFlags, UObject* Sandbox, bool bAllowObjectReconciliation, UObject* InstancingContext) = decltype(StaticLoadObject_)(__int64(GetModuleHandleW(0)) + 0x1DCFB70);
 template <typename T>

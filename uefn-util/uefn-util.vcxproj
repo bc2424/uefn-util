@@ -153,14 +153,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilitySystemComponent_Abilities.h" />
+    <ClInclude Include="AnimSequence.h" />
     <ClInclude Include="Cobalt\cobalt.h" />
     <ClInclude Include="Cobalt\curlhook.h" />
     <ClInclude Include="Cobalt\exithook.h" />
     <ClInclude Include="Cobalt\memcury.h" />
     <ClInclude Include="Cobalt\settings.h" />
     <ClInclude Include="Cobalt\url.h" />
+    <ClInclude Include="ContentBundle.h" />
     <ClInclude Include="CoreGlobals.h" />
     <ClInclude Include="CppSDK\SDK.hpp" />
+    <ClInclude Include="ExternalDataLayerManager.h" />
     <ClInclude Include="FortCheatManager.h" />
     <ClInclude Include="FortGameModeAthena.h" />
     <ClInclude Include="FortGameModeBR.h" />
@@ -172,6 +175,7 @@
     <ClInclude Include="FortPlayerController.h" />
     <ClInclude Include="FortPlayerControllerAthena.h" />
     <ClInclude Include="FortPlayerPawn.h" />
+    <ClInclude Include="GameModeBase.h" />
     <ClInclude Include="GameViewportClient.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Includes.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="PluginManager.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldPartitionLevelStreamingDynamic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

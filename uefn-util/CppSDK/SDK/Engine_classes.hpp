@@ -2242,6 +2242,18 @@ public:
 	bool HasMatchStarted() const;
 	bool MustSpectate(class APlayerController* NewPlayerController) const;
 
+	void ReplicateStreamingStatus(APlayerController* PC)
+	{
+		void (*ReplicateStreamingStatus)(AGameModeBase* GameModeBase, APlayerController* PC) = decltype(ReplicateStreamingStatus)(0xBDCC040 + uintptr_t(GetModuleHandle(0)));
+		return ReplicateStreamingStatus(this, PC);
+	}
+
+	APlayerController* ProcessClientTravel(FString& FURL, bool bSeamless, bool bAbsolute)
+	{
+		APlayerController* (*ProcessClientTravel)(AGameModeBase* GameModeBase, FString& FURL, bool bSeamless, bool bAbsolute) = decltype(ProcessClientTravel)(0xBDC7A40 + uintptr_t(GetModuleHandle(0)));
+		return ProcessClientTravel(this, FURL, bSeamless, bAbsolute);
+	}
+
 public:
 	static class UClass* StaticClass()
 	{
@@ -2286,6 +2298,12 @@ public:
 
 	class FName GetMatchState() const;
 	bool IsMatchInProgress() const;
+
+	void StartToLeaveMap()
+	{
+		void (*StartToLeaveMap)(AGameMode* GameMode) = decltype(StartToLeaveMap)(0xBDD4FC0 + uintptr_t(GetModuleHandle(0)));
+		StartToLeaveMap(this);
+	}
 
 public:
 	static class UClass* StaticClass()
@@ -4057,6 +4075,12 @@ public:
 	bool IsLevelVisible() const;
 	bool IsStreamingStatePending() const;
 	bool ShouldBeLoaded() const;
+
+	UWorld* GetWorld()
+	{
+		UWorld* (*GetWorld)(ULevelStreaming* LevelStreaming) = decltype(GetWorld)(0xC022670 + uintptr_t(GetModuleHandle(0)));
+		return GetWorld(this);
+	}
 
 public:
 	static class UClass* StaticClass()
@@ -7200,6 +7224,19 @@ public:
 	class UWorldPartitionRuntimeCellData*         RuntimeCellData;                                   // 0x00C8(0x0008)(ZeroConstructor, NoDestructor, UObjectWrapper, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 
 public:
+
+	UWorld* GetOuterWorld()
+	{
+		UWorld* (*GetOuterWorld)(UWorldPartitionRuntimeCell* WorldPartitionRuntimeCell) = decltype(GetOuterWorld)(0xCCAE6C0 + uintptr_t(GetModuleHandle(0)));
+		return GetOuterWorld(this);
+	}
+
+	UWorld* GetOwningWorld()
+	{
+		UWorld* (*GetOwningWorld)(UWorldPartitionRuntimeCell * WorldPartitionRuntimeCell) = decltype(GetOwningWorld)(0xCCAE750 + uintptr_t(GetModuleHandle(0)));
+		return GetOwningWorld(this);
+	}
+
 	static class UClass* StaticClass()
 	{
 		return StaticClassImpl<"WorldPartitionRuntimeCell">();
@@ -8084,6 +8121,48 @@ public:
 	class AWorldSettings* K2_GetWorldSettings();
 
 	class UDataLayerManager* GetDataLayerManager() const;
+
+	void SeamlessTravel(const FString& SeamlessTravelURL, bool bAbsolute)
+	{
+		void* (*SeamlessTravel)(UWorld* World, const FString & SeamlessTravelURL, bool bAbsolute) = decltype(SeamlessTravel)(0xCB1F440 + uintptr_t(GetModuleHandle(0)));
+		SeamlessTravel(this, SeamlessTravelURL, bAbsolute);
+	}
+
+	void InternalUpdateStreamingState()
+	{
+		void* (*InternalUpdateStreamingState)(UWorld* World) = decltype(InternalUpdateStreamingState)(0xC999B60 + uintptr_t(GetModuleHandle(0)));
+		InternalUpdateStreamingState(this);
+	}
+
+	void UpdateLevelStreaming()
+	{
+		void* (*UpdateLevelStreaming)(UWorld * World) = decltype(UpdateLevelStreaming)(0xCB2B480 + uintptr_t(GetModuleHandle(0)));
+		UpdateLevelStreaming(this);
+	}
+
+	void BlockTillLevelStreamingCompleted()
+	{
+		void* (*BlockTillLevelStreamingCompleted)(UWorld * World) = decltype(BlockTillLevelStreamingCompleted)(0xCAEEAE0 + uintptr_t(GetModuleHandle(0)));
+		BlockTillLevelStreamingCompleted(this);
+	}
+
+	bool IsGameWorld()
+	{
+		bool (*IsGameWorld)(UWorld* World) = decltype(IsGameWorld)(0xCB0C1A0 + uintptr_t(GetModuleHandle(0)));
+		return IsGameWorld(this);
+	}
+
+	class UWorldPartition* GetWorldPartition()
+	{
+		UWorldPartition* (*GetWorldPartition)(UWorld* World) = decltype(GetWorldPartition)(0xCB064C0 + uintptr_t(GetModuleHandle(0)));
+		return GetWorldPartition(this);
+	}
+
+	static FString* RemovePIEPrefix(const FString* ReturnString, const FString& Source, int32* OutPIEInstanceID = nullptr)
+	{
+		static FString* (*RemovePIEPrefix)(const FString * ReturnString, const FString& Source, int32* OutPIEInstanceID) = decltype(RemovePIEPrefix)(0xCB17E90 + uintptr_t(GetModuleHandle(0)));
+		return RemovePIEPrefix(ReturnString, Source, OutPIEInstanceID);
+	}
 
 public:
 	static class UClass* StaticClass()
@@ -9195,6 +9274,12 @@ public:
 
 public:
 	static class UEngine* GetEngine();
+
+	FWorldContext& GetWorldContextFromWorldChecked(UWorld* World)
+	{
+		FWorldContext& (*GetWorldContextFromWorldChecked)(UEngine * Engine, UWorld * World) = decltype(GetWorldContextFromWorldChecked)(0xCA350E0 + uintptr_t(GetModuleHandle(0)));
+		return GetWorldContextFromWorldChecked(this, World);
+	}
 
 public:
 	static class UClass* StaticClass()
@@ -11307,6 +11392,24 @@ public:
 	TSet<class UWorldPartitionEditorLoaderAdapter*> RegisteredEditorLoaderAdapters;                    // 0x0370(0x0050)(Transient, NonTransactional, EditorOnly, UObjectWrapper, NativeAccessSpecifierPrivate)
 	uint8                                         Pad_3C0[0x10];                                     // 0x03C0(0x0010)(Fixing Struct Size After Last Property [ Dumper-7 ])
 
+	FTransform& GetInstanceTransform()
+	{
+		FTransform& (*GetInstanceTransform)(UWorldPartition* World) = decltype(GetInstanceTransform)(0xCC20600 + uintptr_t(GetModuleHandle(0)));
+		return GetInstanceTransform(this);
+	}
+
+	bool InjectExternalStreamingObject(URuntimeHashExternalStreamingObjectBase* InExternalStreamingObject)
+	{
+		bool (*InjectExternalStreamingObject)(UWorldPartition* World, URuntimeHashExternalStreamingObjectBase * InExternalStreamingObject) = decltype(InjectExternalStreamingObject)(0xCC2C7E0 + uintptr_t(GetModuleHandle(0)));
+		return InjectExternalStreamingObject(this, InExternalStreamingObject);
+	}
+
+	bool RemoveExternalStreamingObject(URuntimeHashExternalStreamingObjectBase* InExternalStreamingObject)
+	{
+		bool (*RemoveExternalStreamingObject)(UWorldPartition * World, URuntimeHashExternalStreamingObjectBase * RemoveExternalStreamingObject) = decltype(RemoveExternalStreamingObject)(0xCC46590 + uintptr_t(GetModuleHandle(0)));
+		return RemoveExternalStreamingObject(this, InExternalStreamingObject);
+	}
+
 public:
 	static class UClass* StaticClass()
 	{
@@ -12715,6 +12818,18 @@ public:
 	TMap<class UExternalDataLayerAsset*, class URuntimeHashExternalStreamingObjectBase*> ExternalStreamingObjects;                          // 0x0038(0x0050)(Transient, UObjectWrapper, NativeAccessSpecifierPrivate)
 	TSet<class UExternalDataLayerAsset*>          InjectedExternalDataLayerAssets;                   // 0x0088(0x0050)(Transient, EditorOnly, UObjectWrapper, NativeAccessSpecifierPrivate)
 	uint8                                         Pad_D8[0xF0];                                      // 0x00D8(0x00F0)(Fixing Struct Size After Last Property [ Dumper-7 ])
+
+	FString* GetExternalStreamingObjectPackagePath(const FString* ReturnValue, const UExternalDataLayerAsset* InExternalDataLayerAsset)
+	{
+		FString* (*GetExternalStreamingObjectPackagePath)(UExternalDataLayerManager* a1, const FString* a2, const UExternalDataLayerAsset* a3) = decltype(GetExternalStreamingObjectPackagePath)(0xCB5B1E0 + uintptr_t(GetModuleHandle(0)));
+		return GetExternalStreamingObjectPackagePath(this, ReturnValue, InExternalDataLayerAsset);
+	}
+
+	FString* GetExternalDataLayerLevelRootPath(const FString* ReturnValue, const UExternalDataLayerAsset* InExternalDataLayerAsset)
+	{
+		FString* (*GetExternalDataLayerLevelRootPath)(UExternalDataLayerManager* a1, const FString* a2, const UExternalDataLayerAsset* a3) = decltype(GetExternalDataLayerLevelRootPath)(0xCB82030 + uintptr_t(GetModuleHandle(0)));
+		return GetExternalDataLayerLevelRootPath(this, ReturnValue, InExternalDataLayerAsset);
+	}
 
 public:
 	static class UClass* StaticClass()
@@ -24044,6 +24159,12 @@ public:
 	void OnLevelHidden();
 	void OnLevelShown();
 
+	void CreateAndSetLevelStreaming(const FString& InPackageName, const FSoftObjectPath& InWorldAsset)
+	{
+		static UWorldPartitionLevelStreamingDynamic* (*CreateLevelStreaming)(UWorldPartitionRuntimeLevelStreamingCell* WorldPartitionRuntimeLevelStreamingCell, const FString & InPackageName, const FSoftObjectPath & InWorldAsset) = decltype(CreateLevelStreaming)(0xCC984B0 + uintptr_t(GetModuleHandle(0)));
+		this->LevelStreaming = CreateLevelStreaming(this, InPackageName, InWorldAsset);
+	}
+
 public:
 	static class UClass* StaticClass()
 	{
@@ -35016,6 +35137,19 @@ public:
 	uint8                                         Pad_288[0x8];                                      // 0x0288(0x0008)(Fixing Struct Size After Last Property [ Dumper-7 ])
 
 public:
+
+	void SetLevelTransform(FTransform& InLevelTransform)
+	{
+		void* (*SetLevelTransform)(UWorldPartitionLevelStreamingDynamic* WorldP, const FTransform& InLevelTransform) = decltype(SetLevelTransform)(0xCC4F6E0 + uintptr_t(GetModuleHandle(0)));
+		SetLevelTransform(this, InLevelTransform);
+	}
+
+	void FinalizeRuntimeLevel()
+	{
+		void* (*FinalizeRuntimeLevel)(UWorldPartitionLevelStreamingDynamic * WorldP) = decltype(FinalizeRuntimeLevel)(0xCC134C0 + uintptr_t(GetModuleHandle(0)));
+		FinalizeRuntimeLevel(this);
+	}
+
 	static class UClass* StaticClass()
 	{
 		return StaticClassImpl<"WorldPartitionLevelStreamingDynamic">();
