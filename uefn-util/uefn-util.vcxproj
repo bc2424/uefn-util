@@ -74,7 +74,7 @@
     <LinkIncremental>false</LinkIncremental>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
-    <OutDir>$(SolutionDir)$(Platform)$(Configuration)\</OutDir>
+    <OutDir>E:\Fortnite\Fortnite 31.41\Engine\Binaries\Win64\UnrealBuildAccelerator\x64</OutDir>
     <TargetName>UbaHost</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -69,8 +69,8 @@ namespace ContentBundle
 {
 	void InitHooks()
 	{
-		CREATEHOOK(BaseAddress() + 0xCB8D5E0, InitializeForPIEHook, &InitializeForPIE);
-		CREATEHOOK(BaseAddress() + 0xCCB86C0, OnStreamingObjectLoadedHook, &OnStreamingObjectLoadedOG);
+		//CREATEHOOK(BaseAddress() + 0xCB8D5E0, InitializeForPIEHook, &InitializeForPIE);
+		//CREATEHOOK(BaseAddress() + 0xCCB86C0, OnStreamingObjectLoadedHook, &OnStreamingObjectLoadedOG);
 		//CREATEHOOK(BaseAddress() + 0xCB71E90, DoInjectContentHook, &DoInjectContent);
 		//CREATEHOOK(BaseAddress() + 0xCB72A20, DoRemoveContentHook, &DoRemoveContent);
 
