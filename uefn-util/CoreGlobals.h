@@ -119,9 +119,10 @@ void SetEngineStartupModuleLoadingCompleteHook()
 
     // lol
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"a.Fort.EnableOldLocomotionData 1", nullptr);
-    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"log LogContentBundle veryverbose", nullptr);
 
     //preferred cvars
+    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Prm.EnableService 0", nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Prm.EnablePrmMotd 0", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"net.AllowPIESeamlessTravel 1", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"net.Iris.EnableFilterMappings 0", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"SupervisedSettings.UseEOSIntegration 0", nullptr);

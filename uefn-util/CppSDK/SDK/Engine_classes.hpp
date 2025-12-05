@@ -4543,6 +4543,12 @@ public:
 	bool WasInputKeyJustPressed(const struct FKey& Key) const;
 	bool WasInputKeyJustReleased(const struct FKey& Key) const;
 
+	void ServerAcknowledgePossession_Implementation(class APawn* P)
+	{
+		void (*ServerAcknowledgePossession_Implementation)(APlayerController* Controller, APawn* P) = decltype(ServerAcknowledgePossession_Implementation)(0xC58E7A0 + uintptr_t(GetModuleHandle(0)));
+		ServerAcknowledgePossession_Implementation(this, P);
+	}
+
 public:
 	static class UClass* StaticClass()
 	{
@@ -24161,7 +24167,7 @@ public:
 
 	void CreateAndSetLevelStreaming(const FString& InPackageName, const FSoftObjectPath& InWorldAsset)
 	{
-		static UWorldPartitionLevelStreamingDynamic* (*CreateLevelStreaming)(UWorldPartitionRuntimeLevelStreamingCell* WorldPartitionRuntimeLevelStreamingCell, const FString & InPackageName, const FSoftObjectPath & InWorldAsset) = decltype(CreateLevelStreaming)(0xCC984B0 + uintptr_t(GetModuleHandle(0)));
+		static UWorldPartitionLevelStreamingDynamic* (*CreateLevelStreaming)(UWorldPartitionRuntimeLevelStreamingCell * WorldPartitionRuntimeLevelStreamingCell, const FString & InPackageName, const FSoftObjectPath& InWorldAsset) = decltype(CreateLevelStreaming)(0xCC984B0 + uintptr_t(GetModuleHandle(0)));
 		this->LevelStreaming = CreateLevelStreaming(this, InPackageName, InWorldAsset);
 	}
 

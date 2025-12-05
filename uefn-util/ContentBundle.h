@@ -9,7 +9,7 @@ static void (*OnStreamingObjectLoaded)(URuntimeHashExternalStreamingObjectBase* 
 
 UWorld* (*GetInjectedWorld)(__int64 ContentBundle) = decltype(GetInjectedWorld)(0xCB82F30 + uintptr_t(GetModuleHandle(0)));
 
-static void(*GetObjectsWithOuter)(const class UObjectBase* Outer, TArray<UObject*>& Results, bool bIncludeNestedObjects, byte ExclusionFlags, byte ExclusionInternalFlags) = decltype(GetObjectsWithOuter)(0x1DE4660 + uintptr_t(GetModuleHandle(0)));
+static void(*GetObjectsWithOuter)(void* Outer, void* Results, bool bIncludeNestedObjects, EObjectFlags ExclusionFlags, byte ExclusionInternalFlags) = decltype(GetObjectsWithOuter)(0x1DE4660 + uintptr_t(GetModuleHandle(0)));
 
 static void (*InitializeForPIE)(__int64 ContentBundle);
 void InitializeForPIEHook(__int64 ContentBundle)
@@ -39,24 +39,33 @@ void InitializeForPIEHook(__int64 ContentBundle)
 static void (*OnStreamingObjectLoadedOG)(URuntimeHashExternalStreamingObjectBase* RuntimeHashExternalStreamingObject, UWorld* InjectedWorld);
 void OnStreamingObjectLoadedHook(URuntimeHashExternalStreamingObjectBase* RuntimeHashExternalStreamingObjectBase, UWorld* InjectedWorld)
 {
+	RuntimeHashExternalStreamingObjectBase->OuterWorld = (TSoftObjectPtr<class UWorld>)UKismetSystemLibrary::Conv_ObjectToSoftObjectReference(InjectedWorld);
+
 	if (RuntimeHashExternalStreamingObjectBase->IsA(URuntimeHashSetExternalStreamingObject::StaticClass()))
 	{
-		auto RuntimeHashExternalStreamingObject = (URuntimeHashSetExternalStreamingObject*)&RuntimeHashExternalStreamingObjectBase;
-		
 		if (RuntimeHashExternalStreamingObjectBase->CellToStreamingData.Num() >= 1)
 		{
-			TArray<UObject*> Objects;
+			TArray<UObject*> Objects = {};
 
-			GetObjectsWithOuter((UObjectBase*)RuntimeHashExternalStreamingObjectBase, Objects, true, 0, 0);
+			GetObjectsWithOuter(RuntimeHashExternalStreamingObjectBase, &Objects, true, EObjectFlags::NoFlags, 0);
 
-			for (UObject* Object : Objects)
+			for (int i = 0; i < Objects.Num(); i++)
 			{
+				UObject* Object = Objects[i];
+
 				if (Object->IsA(UWorldPartitionRuntimeLevelStreamingCell::StaticClass()))
 				{
-					UWorldPartitionRuntimeLevelStreamingCell* RuntimeCell = (UWorldPartitionRuntimeLevelStreamingCell*)&Object;
+					UWorldPartitionRuntimeLevelStreamingCell* RuntimeCell = (UWorldPartitionRuntimeLevelStreamingCell*)Object;
 
-					const FWorldPartitionRuntimeCellStreamingData& CellStreamingData = *RuntimeHashExternalStreamingObject->CellToStreamingData.Find(RuntimeCell->Name);
-					RuntimeCell->CreateAndSetLevelStreaming(CellStreamingData.PackageName, CellStreamingData.WorldAsset);
+					if (!RuntimeCell)
+						continue;
+
+					const FWorldPartitionRuntimeCellStreamingData* CellStreamingData = RuntimeHashExternalStreamingObjectBase->CellToStreamingData.FindValue(RuntimeCell->Name);
+
+					if (!CellStreamingData)
+						continue;
+
+					RuntimeCell->CreateAndSetLevelStreaming(CellStreamingData->PackageName, CellStreamingData->WorldAsset);
 				}
 			}
 		}
@@ -69,8 +78,8 @@ namespace ContentBundle
 {
 	void InitHooks()
 	{
-		//CREATEHOOK(BaseAddress() + 0xCB8D5E0, InitializeForPIEHook, &InitializeForPIE);
-		//CREATEHOOK(BaseAddress() + 0xCCB86C0, OnStreamingObjectLoadedHook, &OnStreamingObjectLoadedOG);
+		CREATEHOOK(BaseAddress() + 0xCB8D5E0, InitializeForPIEHook, &InitializeForPIE);
+		CREATEHOOK(BaseAddress() + 0xCCB86C0, OnStreamingObjectLoadedHook, &OnStreamingObjectLoadedOG);
 		//CREATEHOOK(BaseAddress() + 0xCB71E90, DoInjectContentHook, &DoInjectContent);
 		//CREATEHOOK(BaseAddress() + 0xCB72A20, DoRemoveContentHook, &DoRemoveContent);
 

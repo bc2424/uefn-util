@@ -154,6 +154,12 @@
     <Filter Include="Engine\Source\Runtime\Engine\Public\Animation">
       <UniqueIdentifier>{eb6158d2-12bc-4ad7-853b-6426a0da5d21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FortniteGame\Source\Public\Online">
+      <UniqueIdentifier>{c411eaf9-851f-4bc4-8538-89c041d4c474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FortniteGame\Source\Public\Online\Iris">
+      <UniqueIdentifier>{93309385-629c-4eca-b428-bde92e4a7af1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppSDK\SDK\CoreUObject_functions.cpp">
@@ -264,9 +270,6 @@
     <ClInclude Include="FortItemDefinition.h">
       <Filter>FortniteGame\Source\Public\Items</Filter>
     </ClInclude>
-    <ClInclude Include="FortIrisHelper.h">
-      <Filter>FortniteGame\Source\Private\Online\Iris</Filter>
-    </ClInclude>
     <ClInclude Include="FortCheatManager.h">
       <Filter>FortniteGame\Source\Public\Player</Filter>
     </ClInclude>
@@ -284,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="AnimSequence.h">
       <Filter>Engine\Source\Runtime\Engine\Public\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="FortIrisHelper.h">
+      <Filter>FortniteGame\Source\Public\Online\Iris</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -581,7 +581,7 @@ namespace UC
 		TSet<ElementType> Elements;
 
 	public:
-		inline ValueElementType* Find(KeyElementType& Key)
+		inline ValueElementType* FindValue(KeyElementType& Key)
 		{
 			for (auto It = begin(*this); It != end(*this); ++It)
 			{

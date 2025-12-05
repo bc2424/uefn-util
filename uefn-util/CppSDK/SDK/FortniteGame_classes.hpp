@@ -3416,6 +3416,12 @@ public:
 	bool HasStartedPlaying() const;
 	bool IsSimulatingDamage() const;
 
+	void ApplyCharacterCustomization(class AFortPlayerPawn* Pawn)
+	{
+		void (*ApplyCharacterCustomization)(AFortPlayerState* PlayerState, AFortPlayerPawn* Pawn) = decltype(ApplyCharacterCustomization)(0x1533D4F0 + uintptr_t(GetModuleHandle(0)));
+		ApplyCharacterCustomization(this, Pawn);
+	}
+
 public:
 	static class UClass* StaticClass()
 	{

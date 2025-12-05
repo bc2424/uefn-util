@@ -812,6 +812,12 @@ struct FSoftObjectPath
 public:
 	struct FTopLevelAssetPath                     AssetPath;                                         // 0x0000(0x0018)(NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 	class FString                                 SubPathString;                                     // 0x0018(0x0010)(ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+
+	//FString GetLongPackageName()
+	//{
+	//	FString (*GetLongPackageName)(FSoftObjectPath* ObjectPath) = decltype(GetLongPackageName)(0x1BC3270 + uintptr_t(GetModuleHandle(0)));
+	//	return GetLongPackageName(this);
+	//}
 };
 
 // ScriptStruct CoreUObject.ARFilter

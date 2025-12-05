@@ -9,16 +9,18 @@ void ServerAcknowledgePossessionHook(AFortPlayerControllerAthena* NewPlayer, AFo
 {
 	auto PlayerState = Cast<AFortPlayerStateAthena>(NewPlayer->PlayerState);
 
-	UFortKismetLibrary::UpdatePlayerCustomCharacterPartsVisualization(PlayerState);
-	PlayerState->OnRep_CharacterData();
-
 	TScriptInterface<IAbilitySystemInterface> AbilityInterface{};
 	AbilityInterface.ObjectPointer = PlayerState;
 	AbilityInterface.InterfacePointer = GetInterfaceAddress(PlayerState, IAbilitySystemInterface::StaticClass());
 
 	InitializePlayerGameplayAbilities(AbilityInterface.InterfacePointer);
 
-	NewPlayer->AcknowledgedPawn = P;
+	if (NewPlayer->CosmeticLoadoutPC.Character->HeroDefinition)
+		PlayerState->HeroType = NewPlayer->CosmeticLoadoutPC.Character->HeroDefinition;
+
+	PlayerState->ApplyCharacterCustomization(P);
+
+	NewPlayer->ServerAcknowledgePossession_Implementation(P);
 
 	if (!bRanPossess)
 	{
