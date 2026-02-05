@@ -16,6 +16,12 @@
 static inline void (*ValkyrieInit)();
 static void ValkyrieInitHook() { return; }
 
+static inline bool (*IsNaniteEnabled)();
+static bool IsNaniteEnabledHook() { return false; }
+
+static inline bool (*IsNaniteForceEnabled)();
+static bool IsNaniteForceEnabledHook() { return false; }
+
 DWORD WINAPI Main(LPVOID)
 {
     MH_Initialize();
@@ -29,6 +35,10 @@ DWORD WINAPI Main(LPVOID)
     CREATEHOOK(BaseAddress() + 0xD287500, SetEngineStartupModuleLoadingCompleteHook, &SetEngineStartupModuleLoadingComplete);
 
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x1A7D780), "\xc3", 1, NULL); //gameplay cues need to be hooked before asset search is finished
+
+    //die nanite die
+    CREATEHOOK(BaseAddress() + 0xC902AF0, IsNaniteForceEnabledHook, &IsNaniteForceEnabled);
+    CREATEHOOK(BaseAddress() + 0xC902AC0, IsNaniteEnabledHook, &IsNaniteEnabled);
 
     MH_EnableHook(MH_ALL_HOOKS);
 

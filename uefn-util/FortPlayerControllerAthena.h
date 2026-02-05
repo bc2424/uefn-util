@@ -9,6 +9,8 @@ void ServerAcknowledgePossessionHook(AFortPlayerControllerAthena* NewPlayer, AFo
 {
 	auto PlayerState = Cast<AFortPlayerStateAthena>(NewPlayer->PlayerState);
 
+	P->CharacterMovement->bIgnoreClientMovementErrorChecksAndCorrection = true;
+
 	TScriptInterface<IAbilitySystemInterface> AbilityInterface{};
 	AbilityInterface.ObjectPointer = PlayerState;
 	AbilityInterface.InterfacePointer = GetInterfaceAddress(PlayerState, IAbilitySystemInterface::StaticClass());
@@ -240,6 +242,8 @@ void ServerClientIsReadyToRespawnHook(AFortPlayerControllerAthena* NewPlayer)
 			Pawn->SetHealth(100);
 			Pawn->SetMaxShield(100);
 			Pawn->SetShield(0);
+
+			Pawn->CharacterMovement->bIgnoreClientMovementErrorChecksAndCorrection = true;
 
 			TScriptInterface<IAbilitySystemInterface> AbilityInterface{};
 			AbilityInterface.ObjectPointer = PlayerState;

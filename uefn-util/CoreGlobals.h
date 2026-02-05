@@ -112,10 +112,10 @@ void SetEngineStartupModuleLoadingCompleteHook()
     WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x7D1CD5B), "\xe9\x97\x00", 3, NULL); //blueprinttype structure
 
     //killing MMEs until later
-    WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x14A63619), "\xe9\x82\x02\x00", 4, NULL); //force turn off
-    WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x14A638A7), "\xeb", 1, NULL); //log too
-    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.TacticalSprint 0", nullptr); //temp
-    UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.Sliding 0", nullptr); //temp
+    //WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x14A63619), "\xe9\x82\x02\x00", 4, NULL); //force turn off
+    //WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(BaseAddress() + 0x14A638A7), "\xeb", 1, NULL); //log too
+    //UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.TacticalSprint 0", nullptr); //temp
+    //UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"Fort.MME.Sliding 0", nullptr); //temp
 
     // lol
     UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), L"a.Fort.EnableOldLocomotionData 1", nullptr);

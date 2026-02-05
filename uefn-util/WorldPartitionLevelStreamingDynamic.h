@@ -5,7 +5,10 @@
 static bool (*RequestLevel)(UWorldPartitionLevelStreamingDynamic* LevelDynamic, UWorld* InPersistentWorld, bool bInAllowLevelLoadRequests, byte InBlockPolicy);
 bool RequestLevelHook(UWorldPartitionLevelStreamingDynamic* LevelDynamic, UWorld* InPersistentWorld, bool bInAllowLevelLoadRequests, byte InBlockPolicy)
 {
-    LevelDynamic->bShouldPerformStandardLevelLoading = true;
+    if (UGameplayStatics::GetCurrentLevelName(InPersistentWorld, true) == (L"Helios_Terrain") || UGameplayStatics::GetCurrentLevelName(InPersistentWorld, true) == (L"BlastBerry_Terrain"))
+    {
+        LevelDynamic->bShouldPerformStandardLevelLoading = true;
+    }
 	return RequestLevel(LevelDynamic, InPersistentWorld, bInAllowLevelLoadRequests, InBlockPolicy);
 }
 
@@ -24,6 +27,6 @@ namespace WorldPartitionLevelStreamingDynamic
     void InitHooks()
     {
         CREATEHOOK(BaseAddress() + 0xCC47380, RequestLevelHook, &RequestLevel);
-        CREATEHOOK(BaseAddress() + 0xCCA79B0, HasActorsHook, &HasActors);
+        //CREATEHOOK(BaseAddress() + 0xCCA79B0, HasActorsHook, &HasActors);
     }
 }
