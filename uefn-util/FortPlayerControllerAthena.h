@@ -10,6 +10,9 @@ void ServerAcknowledgePossessionHook(AFortPlayerControllerAthena* NewPlayer, AFo
 	auto PlayerState = Cast<AFortPlayerStateAthena>(NewPlayer->PlayerState);
 
 	P->CharacterMovement->bIgnoreClientMovementErrorChecksAndCorrection = true;
+	P->CharacterMovement->bServerAcceptClientAuthoritativePosition = true;
+	P->CharacterMovement->NetworkMaxSmoothUpdateDistance = 100000.f;
+	P->CharacterMovement->NetworkMinTimeBetweenClientAckGoodMoves = 1.f;
 
 	TScriptInterface<IAbilitySystemInterface> AbilityInterface{};
 	AbilityInterface.ObjectPointer = PlayerState;
@@ -244,6 +247,9 @@ void ServerClientIsReadyToRespawnHook(AFortPlayerControllerAthena* NewPlayer)
 			Pawn->SetShield(0);
 
 			Pawn->CharacterMovement->bIgnoreClientMovementErrorChecksAndCorrection = true;
+			Pawn->CharacterMovement->bServerAcceptClientAuthoritativePosition = true;
+			Pawn->CharacterMovement->NetworkMaxSmoothUpdateDistance = 100000.f;
+			Pawn->CharacterMovement->NetworkMinTimeBetweenClientAckGoodMoves = 1.f;
 
 			TScriptInterface<IAbilitySystemInterface> AbilityInterface{};
 			AbilityInterface.ObjectPointer = PlayerState;
