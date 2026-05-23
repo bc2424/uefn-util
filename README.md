@@ -9,7 +9,7 @@ https://gofile.io/d/5KnfUv
 1. Get the latest version of uefn-util from [releases](https://github.com/bc2424/uefn-util/releases/tag/31.41) or compile from source with Visual Studio 2022.
 2. Place the DLL "UbaHost.dll" in the path "Engine\Binaries\Win64\UnrealBuildAccelerator\x64\" in your install.
    *  "UnrealBuildAccelerator\x64\" will not exist by default.
-3. [Download Neonite from Hybrid FNBR's github](https://github.com/HybridFNBR/Neonite). Follow the readme then run the `Start Neonite.bat` file.
+3. [Download this specific commit of Neonite from Hybrid FNBR's github](https://github.com/HybridFNBR/Neonite/tree/09fa296df294a2c148070bd38ab77c4ae8641bb9). Follow the readme then run the `Start Neonite.bat` file.
 4. Launch UEFN from the shipping exe in FortniteGame\Binaries\Win64\ with Neonite open, if the DLL was placed correctly, you will load into the unlocked editor.
 5. To load ingame, click Edit in the top left, go to Editor Preferences... scroll to Play Credentials and Enable Logins then click add Credentials, user id should be a username with a url at the end, password will be the same username (password is hidden), type should be set to exchangecode.
   * example:
